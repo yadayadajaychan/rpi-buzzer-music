@@ -6,6 +6,8 @@ from gpiozero import TonalBuzzer
 from gpiozero.tones import Tone
 
 bz = TonalBuzzer(12, initial_value=None, mid_tone=Tone('A4'), octaves=3)
+octave_offset = 0
+bpm = 60
 
 def set_bpm(new_bpm):
     global bpm
@@ -25,6 +27,10 @@ def set_bpm(new_bpm):
     sixteenth = sec_per_beat * 0.25
     global thirty_second
     thirty_second = sec_per_beat * 0.125
+
+def set_octave_offset(offset):
+    global octave_offset
+    octave_offset = offset
 
 def pause(length):
     global whole
@@ -56,11 +62,15 @@ with open(sys.argv[1], "r") as csvfile:
 
             if row[0] == "bpm":
                 set_bpm(int(row[1]))
+            elif row[0] == "oct":
+                set_octave_offset(int(row[1]))
             elif row[0] == "R":
                 bz.stop()
                 pause(row[1])
             else:
-                bz.play(row[0])
+                octave = int(row[0][1])
+                octave += octave_offset
+                bz.play(row[0][0] + str(octave))
                 pause(row[1])
         elif len(row) == 1:
-            print(row)
+            print(row) # prints out comments
