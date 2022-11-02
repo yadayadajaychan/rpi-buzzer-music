@@ -62,3 +62,5 @@ with open(sys.argv[1], "r") as csvfile:
             else:
                 bz.play(row[0])
                 pause(row[1])
+        elif len(row) == 1:
+            print(row)
