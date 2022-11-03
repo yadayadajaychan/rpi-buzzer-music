@@ -68,9 +68,9 @@ with open(sys.argv[1], "r") as csvfile:
                 bz.stop()
                 pause(row[1])
             else:
-                octave = int(row[0][1])
+                octave = int(row[0][-1:])
                 octave += octave_offset
-                bz.play(row[0][0] + str(octave))
+                bz.play(row[0][:len(row[0])-1] + str(octave))
                 pause(row[1])
         elif len(row) == 1:
             print(row) # prints out comments
