@@ -56,11 +56,20 @@ def pause(length):
 
 with open(sys.argv[1], "r") as csvfile:
     csvreader = csv.reader(csvfile)
+
+    jump = False
+    jumpto = ""
+
     for row in csvreader:
         if len(row) == 2:
             print(row)
 
-            if row[0] == "bpm":
+            if jump:
+                pass
+            elif row[0] == "jump":
+                jump = True
+                jumpto = row[1]
+            elif row[0] == "bpm":
                 set_bpm(int(row[1]))
             elif row[0] == "oct":
                 set_octave_offset(int(row[1]))
@@ -74,3 +83,6 @@ with open(sys.argv[1], "r") as csvfile:
                 pause(row[1])
         elif len(row) == 1:
             print(row) # prints out comments
+            if jump and jumpto == row[0]:
+                jump = False
+                jumpto = ""
